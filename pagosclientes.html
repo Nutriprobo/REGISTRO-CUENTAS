@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pagos Clientes</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background-color: #b0e0e6; }
+        input, button { width: 100%; padding: 10px; margin-top: 10px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+        th { background-color: #f2f2f2; }
+        #totalPaid { font-size: 20px; color: red; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Pagos Clientes</h1>
+  <!-- Botón para volver al inicio -->
+    <button onclick="window.location.href='index.html'">Volver a Inicio</button>
+    <form id="paymentForm">
+        <input type="date" id="date" required>
+        <input type="text" id="description" placeholder="Descripción" required>
+        <input type="number" id="payment" placeholder="Pago" required>
+        <button type="button" onclick="addPayment()">Agregar Pago</button>
+    </form>
+    <h2>Total Pagado: <span id="totalPaid">0</span></h2>
+    <table id="paymentsTable">
+        <thead>
+            <tr>
+                <th>Fecha</th>
+                <th>Descripción</th>
+                <th>Pago</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <script>
+        const loadPayments = () => {
+            const payments = JSON.parse(localStorage.getItem('clientPayments')) || [];
+            const tableBody = document.getElementById('paymentsTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            payments.forEach((payment, index) => {
+                let row = tableBody.insertRow();
+                row.insertCell(0).textContent = payment.date;
+                row.insertCell(1).textContent = payment.description;
+                row.insertCell(2).textContent = payment.amount;
+                let actionCell = row.insertCell(3);
+                let editButton = document.createElement('button');
+                editButton.textContent = 'Editar';
+                editButton.onclick = function() { editPayment(index); };
+                actionCell.appendChild(editButton);
+                let deleteButton = document.createElement('button');
+                deleteButton.textContent = 'Eliminar';
+                deleteButton.onclick = function() { deletePayment(index); };
+                actionCell.appendChild(deleteButton);
+            });
+            updateTotal();
+        };
+
+        const addPayment = () => {
+            const date = document.getElementById('date').value;
+            const description = document.getElementById('description').value;
+            const amount = parseFloat(document.getElementById('payment').value);
+            const newPayment = { date, description, amount };
+            const payments = JSON.parse(localStorage.getItem('clientPayments')) || [];
+            payments.push(newPayment);
+            localStorage.setItem('clientPayments', JSON.stringify(payments));
+            loadPayments();
+            document.getElementById('paymentForm').reset();
+        };
+
+        const editPayment = (index) => {
+            // Agrega aquí la lógica para editar pagos, probablemente usando un formulario modal
+        };
+
+        const deletePayment = (index) => {
+            const payments = JSON.parse(localStorage.getItem('clientPayments')) || [];
+            payments.splice(index, 1);
+            localStorage.setItem('clientPayments', JSON.stringify(payments));
+            loadPayments();
+        };
+
+        const updateTotal = () => {
+            const payments = JSON.parse(localStorage.getItem('clientPayments')) || [];
+            const total = payments.reduce((acc, payment) => acc + payment.amount, 0);
+            document.getElementById('totalPaid').textContent = total.toFixed(2);
+        };
+
+        window.onload = loadPayments;
+    </script>
+</body>
+</html>
