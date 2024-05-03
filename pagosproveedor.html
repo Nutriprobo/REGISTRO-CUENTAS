@@ -3,31 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pagos PROVEEDOR</title>
+    <title>Pagos Proveedor</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background-color: #b0e0e6; }
+        body { font-family: Arial, sans-serif; margin: 0; padding: 10px; background-color: #b0c4de; }
         input, button { width: 100%; padding: 10px; margin-top: 10px; }
         table { width: 100%; border-collapse: collapse; margin-top: 20px; }
         th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
         th { background-color: #f2f2f2; }
-        #totalPaid { font-size: 20px; color: red; margin-top: 20px; }
+        #totalPaid { font-size: 20px; color: green; margin-top: 20px; }
+        button#backButton { background-color: #4CAF50; color: white; margin-bottom: 10px; }
     </style>
 </head>
 <body>
-    <h1>Pagos PROVEEDOR</h1>
-<body>
-    <h1>Pagos Clientes</h1>
+    <h1>Pagos Proveedor</h1>
     <!-- Botón para volver al inicio -->
-    <button onclick="window.location.href='index.html'">Volver a Inicio</button>
-    <form id="paymentForm">
-        <input type="date" id="date" required>
-        <input type="text" id="description" placeholder="Descripción" required>
-        <input type="number" id="payment" placeholder="Pago" required>
-        <button type="button" onclick="addPayment()">Agregar Pago</button>
-    </form>
-    ...
-</body>
-
+    <button id="backButton" onclick="window.location.href='index.html'">Volver a Inicio</button>
     <form id="paymentForm">
         <input type="date" id="date" required>
         <input type="text" id="description" placeholder="Descripción" required>
@@ -49,7 +39,7 @@
     </table>
     <script>
         const loadPayments = () => {
-            const payments = JSON.parse(localStorage.getItem('clientPayments')) || [];
+            const payments = JSON.parse(localStorage.getItem('providerPayments')) || [];
             const tableBody = document.getElementById('paymentsTable').getElementsByTagName('tbody')[0];
             tableBody.innerHTML = '';
             payments.forEach((payment, index) => {
@@ -72,29 +62,29 @@
 
         const addPayment = () => {
             const date = document.getElementById('date').value;
-            const description = document.getElementById('description').value;
-            const amount = parseFloat(document.getElementById('payment').value);
+            the description = document.getElementById('description').value;
+            the amount = parseFloat(document.getElementById('payment').value);
             const newPayment = { date, description, amount };
-            const payments = JSON.parse(localStorage.getItem('clientPayments')) || [];
+            const payments = JSON.parse(localStorage.getItem('providerPayments')) || [];
             payments.push(newPayment);
-            localStorage.setItem('clientPayments', JSON.stringify(payments));
+            localStorage.setItem('providerPayments', JSON.stringify(payments));
             loadPayments();
             document.getElementById('paymentForm').reset();
         };
 
         const editPayment = (index) => {
-            // Agrega aquí la lógica para editar pagos, probablemente usando un formulario modal
+            // Implementar lógica de edición
         };
 
         const deletePayment = (index) => {
-            const payments = JSON.parse(localStorage.getItem('clientPayments')) || [];
+            const payments = JSON.parse(localStorage.getItem('providerPayments')) || [];
             payments.splice(index, 1);
-            localStorage.setItem('clientPayments', JSON.stringify(payments));
+            localStorage.setItem('providerPayments', JSON.stringify(payments));
             loadPayments();
         };
 
         const updateTotal = () => {
-            const payments = JSON.parse(localStorage.getItem('clientPayments')) || [];
+            const payments = JSON.parse(localStorage.getItem('providerPayments')) || [];
             const total = payments.reduce((acc, payment) => acc + payment.amount, 0);
             document.getElementById('totalPaid').textContent = total.toFixed(2);
         };
